@@ -1,13 +1,50 @@
-// YOUR_BASE_DIRECTORY/netlify/functions/api.ts
+const express = require("express");
+const serverless = require("serverless-http");
+const app = express();
+const router = express.Router();
 
-import express, { Router } from "express";
-import serverless from "serverless-http";
+let records = [];
 
-const api = express();
+//Get all students
+router.get("/", (req, res) => {
+  res.send("App is running..");
+});
 
-const router = Router();
-router.get("/hello", (req, res) => res.send("Hello World!"));
+//Create new record
+router.post("/add", (req, res) => {
+  res.send("New record added.");
+});
 
-api.use("/api/", router);
+//delete existing record
+router.delete("/", (req, res) => {
+  res.send("Deleted existing record");
+});
 
-export const handler = serverless(api);
+//updating existing record
+router.put("/", (req, res) => {
+  res.send("Updating existing record");
+});
+
+//showing demo records
+router.get("/demo", (req, res) => {
+  res.json([
+    {
+      id: "001",
+      name: "Smith",
+      email: "smith@gmail.com",
+    },
+    {
+      id: "002",
+      name: "Sam",
+      email: "sam@gmail.com",
+    },
+    {
+      id: "003",
+      name: "lily",
+      email: "lily@gmail.com",
+    },
+  ]);
+});
+
+app.use("/.netlify/functions/api", router);
+module.exports.handler = serverless(app);
